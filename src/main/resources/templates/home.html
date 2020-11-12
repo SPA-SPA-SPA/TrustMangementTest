@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跨域信任管理系统</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/showData.js"></script>
+
+    <script src="https://www.runoob.com/static/js/wonderland.js"></script>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <style>
+        #header{
+            background-color: antiquewhite;
+            height: 50px;
+            width: auto;
+            padding: 5px;
+            line-height: 35px;
+            font-size: 30px;
+            font-family: 'Microsoft YaHei UI Light';
+            margin: 0 auto;
+        }
+        #body{
+            height: 1200px;
+            margin: 0 auto;
+            font-family: "Microsoft YaHei UI";
+        }
+        #parameterSetting{
+            padding-top: 20px;
+            float: top;
+        }
+        #exprimentShow{
+            float: bottom;
+            height: 650px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header" class="text-center">
+        <span style="float: left;padding-left:100px;">跨域信任管理系统</span>
+    </div>
+
+    <div id = "body" class="container">
+        <div id = "parameterSetting">
+            <div class="row">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">系统参数设置</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" style="line-height: 35px;">
+                            <div class="col-lg-3 text-right" >
+                                <span>恶意节点比例:</span>
+                            </div>
+                            <div class="col-lg-3 text-left" >
+                                <input type="text" class="form-control" id="inputMaliciousNodeRatio" placeholder="请输入恶意节点比例(0~0.5)">
+                            </div>
+                            <div class="col-lg-3 text-right">
+                                <span>交互次数：</span>
+                            </div>
+                            <div class="col-lg-2 text-left">
+                                <input type="text" class="form-control" id="inputInteractionTimes" placeholder="请输入交互次数">
+                            </div>
+                        </div>
+                        <div class="row" style="line-height: 35px; padding-top: 15px;">
+                            <div class="col-lg-3 text-right">
+                                <span>信任衰减因子:</span>
+                            </div>
+                            <div class="col-lg-3 text-left">
+                                <input type="text" class="form-control" id="inputTrustFactor" placeholder="请输入信任衰减因子(0~1)">
+                            </div>
+                            <div class="col-lg-3 text-right">
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8"></div>
+                            <div class="col-lg-1 text-center">
+                                <button type="button" id="startButton" name="submit" class="btn btn-primary">开始运行</button>
+                            </div>
+                            <div class="col-lg-1 text-center">
+                                <button type="button" id="stopButton" class="btn btn-warning">暂停运行</button>
+                            </div>
+                            <div class="col-lg-1 text-center">
+                                <button type="button" id="resetButton" name="reset" class="btn btn-danger">参数重置</button>
+                            </div>
+                            <div class="col-lg-1">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="exprimentShow" class="row">
+            <div class="col-lg-3 text-center" >
+                <div class="panel panel-warning" style="height: 800px;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">系统运行状态</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row" id="systemStatus1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 text-center" >
+                <div class="panel panel-success" style="height: 900px;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">设备交互情况</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <form class="form-inline">
+                                <label>请输入节点序号：</label>
+                                <input type="text" class="form-control" id="searchNumber" placeholder="请输入查询节点的序号">
+                                <button type="button" class="btn btn-primary" id="searchButton" style="margin-left: 30px;">查询</button>
+                            </form>
+                        </div>
+                        <div class="row text-center" style="margin-top: 20px;">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-5" id="chart1" style="width: 600px;height:400px;"></div>
+                            <div class="col-lg-2"></div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-5" id="chart2" style="width: 600px;height:400px;"></div>
+                            <div class="col-lg-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+
+    <div id = "bottom">
+        <span>跨域信任管理系统</span>
+        <span>版权所有©广西大学</span>
+    </div>
+</body>
+<style>
+    #bottom{
+        background-color: black;
+        height: 60px;
+        width: auto;
+        float: bottom;
+        text-align: center;
+        color: white;
+        font-family: "Microsoft YaHei UI Light";
+        line-height: 50px;
+    }
+</style>
+<script>
+    $('#searchButton').click(function () {
+        var nodeNumber =  $('#searchNumber').val();
+        if (nodeNumber == "") {
+            alert("节点序号不能为空!");
+        } else {
+            var sendData = {
+                "nodeNumber":nodeNumber
+            }
+
+            $.post("/searchNode",sendData,function(data){
+                if(data){
+                    //alert(data);
+                    var trustDataIndex = new Array();
+                    var domainTrustIndex = new Array();
+
+                    var trustData = new Array();
+                    var domainTrustData = new Array();
+
+                    for (i = 0; i < data[0] - 1; i++) {
+                        trustDataIndex[i] = i;
+                    }
+                    for (i = 0; i < data[0] - 1; i++) {
+                        trustData[i] = data[i+1];
+                    }
+
+                    i = 0;
+                    k = data[0];
+                    while(k < data.length && data[k] > 0) {
+                        domainTrustIndex[i] = i;
+                        domainTrustData[i++] = data[k++];
+                    }
+
+                    myChart.setOption({
+                        xAxis: {
+                            data: trustDataIndex
+                        },
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: '信任值',
+                            data: trustData
+                        }]
+                    });
+
+                    domainChart.setOption({
+                        xAxis: {
+                            data: domainTrustIndex
+                        },
+                        series: [{
+                            // 根据名字对应到相应的系列
+                            name: '信任值',
+                            data: domainTrustData
+                        }]
+                    });
+                }else{
+
+                }
+            })
+        }
+    })
+
+    $('#stopButton').click(function () {
+
+        var sendData = {
+            "isRuning":false
+        }
+
+        $.post("/stopExpriment",sendData,function(result){
+            //因为SpringMVC框架和Jquery框架的联合作用，使得传回来的result保留了原有数据类型
+            if(result){
+                $('#systemStatus1').append('<div class = "row">运行已暂停!</div>');
+            }else{
+                alert("fail");
+            }
+        })
+    })
+
+    $('#startButton').click(function () {
+        var maliciousRatio = $('#inputMaliciousNodeRatio').val();
+        var interactionTimes = $('#inputInteractionTimes').val();
+        var trustFactor = $('#inputTrustFactor').val();
+        //alert(maliciousRatio + " " + interactionTimes + " " + trustFactor + "fdfdf");
+
+        if (maliciousRatio == "" || interactionTimes == "" || trustFactor == "") {
+            alert("系统参数值不能为空!");
+        }else {
+            var sendData = {
+                "maliciousRatio":maliciousRatio,
+                "interactionTimes":interactionTimes,
+                "trustFactor":trustFactor
+            }
+
+            $.post("/setting",sendData,function(result){
+                //因为SpringMVC框架和Jquery框架的联合作用，使得传回来的result保留了原有数据类型
+                if(result){
+                    //alert(result);
+                    $('#systemStatus1').append('<div class = "row">开始运行!</div>');
+                    setTimeout(function(){
+                        $('#systemStatus1').append('<div class = "row">已完成设置的运行次数!</div>');
+                    },1000);
+                }else{
+                    alert("fail");
+                }
+            })
+        }
+    })
+
+    $(document).ready(function(){
+        $('#resetButton').click(function () {
+            $('#inputMaliciousNodeRatio').attr({
+                "value":"0.1",
+            });
+            $('#inputInteractionTimes').attr({
+                "value":"100",
+            })
+            $('#inputTrustFactor').attr({
+                "value":"0.8",
+            })
+        });
+    });
+</script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('chart1'), 'macarons');
+
+    myChart.setOption({
+        title:{
+            text:'节点信任值变化情况'
+        },
+        tooltip:{},
+        xAxis:{
+            data:["1","2","3","4"]
+        },
+        yAxis:{
+            data:["0","0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0"]
+        },
+        yAxis:{
+        },
+        series:[{
+            name:'访问量',
+            type:'line',
+            data:[0,0,0,0]
+        }]
+    });
+
+    var domainChart = echarts.init(document.getElementById('chart2'), 'macarons');
+
+    domainChart.setOption({
+        title:{
+            text:'物联网域信任值变化情况'
+        },
+        tooltip:{},
+        xAxis:{
+            data:["1","2","3","4"]
+        },
+        yAxis:{
+            data:["0","0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0"]
+        },
+        yAxis:{
+        },
+        series:[{
+            name:'访问量',
+            type:'line',
+            data:[0,0,0,0]
+        }]
+    });
+</script>
+</html>
